@@ -1,0 +1,18 @@
+FROM python:3.10-slim
+WORKDIR /app
+# 更新源并安装本地数据库环境 SQLite3
+RUN apt-get update && apt-get install -y \
+    sqlite3 \
+    libsqlite3-dev \
+    && rm -rf /var/lib/apt/lists/*
+COPY . .
+# python 依赖包安装
+RUN pip install --no-cache-dir -r requirements.txt
+# 创建数据库表
+RUN python init_database_v2.py
+# 创建管理员账号
+# RUN python init_admin.py
+# 初始化LLM模板（如果使用AI功能）
+# RUN python init_llm_templates.py
+
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
