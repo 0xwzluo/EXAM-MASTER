@@ -1,0 +1,13 @@
+version: "3.9"
+services:
+    exam-master-api:
+        image: exam-master-api:dev_2.0
+        container_name: exam-master
+        restart: unless-stopped
+        ports:
+            - 8008:8000
+        # command: tail -100f /dev/null
+        environment:
+            - ADMIN:admin/admin123
+        volumes:
+            - ./data/databases:/app/databases
