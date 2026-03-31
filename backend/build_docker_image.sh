@@ -6,6 +6,12 @@ CONTAINER_ID=$(docker run -d -p 8008:8000 --name exam-master exam-master-api:dev
 echo "Waiting for 30 seconds..."
 sleep 30
 docker exec -it exam-master python init_admin.py
+# dump出来sqlite数据库文件
+docker cp exam-master:/app/databases ./
+# docker exec -it exam-master rm -rf /app/databases
+# 提交镜像
 docker commit -a "0xwzluo" -m "fixed bcrypt and admin init" exam-master exam-master-api:dev_2.0
+# 用docker-compose方式启动镜像
+docker compose up -d
 # 日志
 docker logs exam-api --follow
